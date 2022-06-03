@@ -1,8 +1,13 @@
+import org.assertj.core.util.Strings;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.Arrays;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class addNumberTest {
 
@@ -11,14 +16,23 @@ class addNumberTest {
     @ValueSource(strings = {"1 3 4 5"})
     public void 문자열나누기(String input){
         String[] array = input.split(" ");
-        System.out.println(input);
-
+        assertThat(Arrays.toString(array)).isEqualTo("[1, 3, 4, 5]");
     }
 
-    @Test
+    @ParameterizedTest
     @DisplayName("null 이거나 빈 문자열일 경우 예외처리 테스트")
-    public void 문자열예외처리(){
+    @ValueSource(strings = {"", " "})
+    public void 문자열예외처리(String input){
+        assertThatThrownBy(() ->{
+            isBlank(input);
+        }).isInstanceOf(IllegalArgumentException.class);
+    }
 
+    private boolean isBlank(String data) {
+        if(data.trim().isEmpty()){
+            throw new IllegalArgumentException();
+        }
+        return true;
     }
 
     @Test
