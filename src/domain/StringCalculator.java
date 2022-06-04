@@ -7,11 +7,11 @@ import exception.ValidationException;
 public class StringCalculator {
 
     public static int calculationResult(String inputValue) {
-        isBlank(inputValue);
+        isNull(inputValue);
         return calculate(StringUtil.stringSplit(inputValue));
     }
 
-    private static void isBlank(String inputValue) {
+    private static void isNull(String inputValue) {
         if (inputValue.trim().isEmpty()) {
             throw new ValidationException(ValidationException.blankValidation);
         }
