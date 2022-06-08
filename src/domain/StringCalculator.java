@@ -12,8 +12,8 @@ public class StringCalculator {
     }
 
     private static void isNull(String inputValue) {
-        if (inputValue.trim().isEmpty()) {
-            throw new ValidationException(ValidationException.blankValidation);
+        if (inputValue.trim().isEmpty() || inputValue == null) {
+            throw new ValidationException(ValidationException.BLANK_VALIDATION);
         }
     }
 

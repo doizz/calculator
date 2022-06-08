@@ -3,6 +3,7 @@ import domain.StringCalculator;
 
 public class Calculator {
     public static void main(String[] args) {
-        System.out.println(StringCalculator.calculationResult(InputView.inputCalculatorValue()));
+        String inputValue = InputView.inputCalculatorValue();
+        System.out.println(StringCalculator.calculationResult(inputValue));
     }
 }

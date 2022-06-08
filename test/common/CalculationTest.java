@@ -33,7 +33,5 @@ public class CalculationTest {
         } else {
             throw new IllegalArgumentException("사칙연산이 아닙니다.");
         }
-
     }
-
 }
