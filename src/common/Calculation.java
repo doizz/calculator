@@ -2,44 +2,38 @@ package common;
 
 import exception.ValidationException;
 
-public class Calculation {
+import java.util.Arrays;
+import java.util.function.BiFunction;
 
-    public int calculate(int firstValue, char operator, int secondValue) {
-        //enum 클래스로 리팩토링.
-        if (operator == '+') {
-            return add(firstValue, secondValue);
-        }
-        if (operator == '-') {
-            return subtract(firstValue, secondValue);
-        }
-        if (operator == '*') {
-            return multiply(firstValue, secondValue);
-        }
-        if (operator == '/') {
-            return divide(firstValue, secondValue);
-        }
-        throw new ValidationException(ValidationException.DIVIDE_VALIDATION);
+
+public enum Calculation {
+    PLUS("+", (num1, num2) -> num1 + num2),
+    MINUS("-", (num1, num2) -> num1 - num2),
+    MULTIPLY("*", (num1, num2) -> num1 * num2),
+    DIVIDE("/", (num1, num2) -> {
+        if(num2 == 0)
+            throw new IllegalArgumentException(ValidationException.DIVIDE_VALIDATION);
+        return num1 / num2;
+    });
+
+    private String operator;
+    private BiFunction<Integer, Integer, Integer> expression;
+
+    Calculation(String operator, BiFunction<Integer, Integer, Integer> expression) {
+        this.operator = operator;
+        this.expression = expression;
     }
 
-    private int add(int a, int b) {
-        return a + b;
+    public static int result(String operator, int firstValue, int secondValue) {
+        return operatorFind(operator).expression.apply(firstValue, secondValue);
     }
 
-    private int subtract(int a, int b) {
-        return a - b;
-    }
-
-    private int multiply(int a, int b) {
-        return a * b;
-    }
-
-    private int divide(int a, int b) {
-        try {
-            return a / b;
-        } catch (ValidationException e) {
-            //로깅, Exception
-            throw new ValidationException(ValidationException.DIVIDE_VALIDATION);
-        }
+    public static Calculation operatorFind(String type) {
+        return Arrays.stream(Calculation.values())
+                .filter(operator -> operator.operator.equals(type))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(ValidationException.CALCULATOR_VALIDATION));
     }
 
 }
+

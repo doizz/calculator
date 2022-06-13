@@ -4,6 +4,8 @@ import common.Calculation;
 import common.StringUtil;
 import exception.ValidationException;
 
+import java.util.Objects;
+
 public class StringCalculator {
 
     public static int calculationResult(String inputValue) {
@@ -12,16 +14,16 @@ public class StringCalculator {
     }
 
     private static void isNull(String inputValue) {
-        if (inputValue.trim().isEmpty() || inputValue == null) {
+        if (inputValue.isBlank() || Objects.isNull(inputValue)) {
             throw new ValidationException(ValidationException.BLANK_VALIDATION);
         }
     }
 
-    private static int calculate(String[] splitInputValue) {
-        Calculation cal = new Calculation();
+    public static int calculate(String[] splitInputValue) {
         int resultValue = StringUtil.StringByInt(splitInputValue[0]);
+
         for (int i = 0; i < splitInputValue.length - 2; i += 2) {
-            resultValue = cal.calculate(resultValue, splitInputValue[i + 1].charAt(0), StringUtil.StringByInt(splitInputValue[i + 2]));
+            resultValue = Calculation.result(String.valueOf(splitInputValue[i + 1].charAt(0)), resultValue,StringUtil.StringByInt(splitInputValue[i + 2]));
         }
         return resultValue;
     }

@@ -17,7 +17,7 @@ class calculatorTest {
     @ParameterizedTest
     @DisplayName("공백 문자열이 있으면 split 으로 문자를 나누는 테스트")
     @ValueSource(strings = {"1 + 3 * 2"})
-    public void 문자열나누기(String input) {
+    public void StringSplit(String input) {
         String[] array = StringUtil.stringSplit(input);
         String[] array2 = {"1", "+", "3", "*", "2"};
         assertThat(array).isEqualTo(array2);
@@ -26,59 +26,37 @@ class calculatorTest {
     @ParameterizedTest
     @NullAndEmptySource
     @DisplayName("null 이거나 빈 문자열일 경우 예외처리 테스트")
-    public void 문자열예외처리(String inputValue) {
+    public void stringValidation(String inputValue) {
         assertThatThrownBy(() -> {
-            StringCalculator.isNull(inputValue);
+            StringCalculator.calculationResult(inputValue);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    @DisplayName("더하기")
-    public void 더하기테스트() {
-        assertThat(25).isEqualTo(Calculation.calculate(10,'+', 15));
+    @DisplayName("사칙연산테스트")
+    public void calculation() {
+        assertThat(25).isEqualTo(Calculation.result("+",10, 15));
+        assertThat(8).isEqualTo(Calculation.result("-",10, 2));
+        assertThat(100).isEqualTo(Calculation.result("*",10, 10));
+        assertThat(1).isEqualTo(Calculation.result("/",10, 10));
     }
 
-    @Test
-    @DisplayName("빼기")
-    public void 빼기테스트() {
-        assertThat(5).isEqualTo(Calculation.subtract(15, 10));
-    }
-
-    @Test
-    @DisplayName("곱하기")
-    public void 곱하기테스트() {
-        Calculation cal = new Calculation();
-        assertThat(20).isEqualTo(cal.multiply(10, 2));
-    }
-
-    @Test
-    @DisplayName("나누기")
-    public void 나누기테스트() {
-        assertThat(2).isEqualTo(Calculation.divide(10, 5));
-    }
 
     @ParameterizedTest
     @DisplayName("사칙연산기호가 아닌경우 예외처리")
-    @ValueSource(strings = {"1 * 2 % 3"})
-    public void 사칙연산기호가아닐경우(String inputValue) {
+    @ValueSource(strings = {"1 % 2 * 3"})
+    public void operatorValidation(String inputValue) {
         assertThatThrownBy(() -> {
-            calculation(inputValue.split(" "));
+            StringCalculator.calculate(inputValue.split(" "));
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
     @ParameterizedTest
     @DisplayName("사칙연산을 모두 포함하는 기능 구현")
     @ValueSource(strings = {"1 * 2 * 3"})
-    public void 사칙연산을모두포함하는경우(String inputValue) {
-        int resultValue = calculation(inputValue.split(" "));
+    public void calculationValidation(String inputValue) {
+        int resultValue = StringCalculator.calculate(inputValue.split(" "));
         assertThat(6).isEqualTo(resultValue);
     }
 
-    public int calculation(String[] splitInputValue) {
-        int resultValue = Integer.parseInt(splitInputValue[0]);
-        for (int i = 0; i < splitInputValue.length - 2; i += 2) {
-            resultValue = CalculationTest.calculate(resultValue, splitInputValue[i + 1].charAt(0), Integer.parseInt(splitInputValue[i + 2]));
-        }
-        return resultValue;
-    }
 }

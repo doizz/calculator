@@ -1,8 +1,11 @@
+package servoce;
+
 import common.InputView;
 import domain.StringCalculator;
 
-public class Calculator {
-    public static void main(String[] args) {
+public class CalculatorService {
+
+    public void calculatorStart(){
         String inputValue = InputView.inputCalculatorValue();
         System.out.println(StringCalculator.calculationResult(inputValue));
     }
